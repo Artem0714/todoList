@@ -10,40 +10,95 @@ body {
 
 .header {
     max-width: 750px;
-    margin: 0 auto;
-    font-weight:500;
+    margin: 20px auto;
+    font-weight:700;
     font-size: 24px;
-}
-
-.header1 {
-    max-width: 750px;
-    margin: 0 auto;
 }
 
 .shadow_item, .cap_item{
     max-width: 750px;
     display: flex;
     list-style-type: none;
-    justify-content: space-around;
-    margin: 0 auto;
+    /* justify-content: space-around; */
+    margin: 20px auto;
     padding: 0;
+    align-items: center;
 }
 
-.first_column {
-    width: 90%;
-    text-align: center;
+.first_column{
+    width: 80%;
+    margin: 0 5px;
+}
+
+.first_column_base {
+    border: 1px dashed rgba(0, 0, 0, 0.33);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 0 5px;
+    width: calc(80% - 30px);
+}
+
+.second_column_base {
+    border: 1px dashed rgba(0, 0, 0, 0.33);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 0 auto;
+    width: calc(20% - 30px);
 }
 
 .second_column {
-    width: 10%;
+    width: 20%;
+    margin: 0 auto;
+}
+
+.shadow_item_first{
+    height: 50px;
+    width: 98%;
+    background: rgba(0, 0, 0, 0.33);
+    border-radius: 10px;
+    margin: 0 auto;
+}
+
+
+.shadow_item_second {
+    display: none;
+}
+
+label::before {
+    content: '';
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    background: rgba(0, 0, 0, 0.33);
+    border-radius: 10px;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
+.shadow_item_second:checked + label::before{
+    background:rgba(41, 41, 41, 0.2);
+    content: '\2713';
+    font-size: 20px;
+    color: rgb(0, 255, 0);
+}
+
+
+.button_style {
+    height: 50px;
+    width: 50px;
+    background: rgba(0, 0, 0, 0.33);
+    border-radius: 25px;
+    padding: 0;
+    border: 0;
+    font-size: 24px;
+    font-weight: 100;
     text-align: center;
 }
 
-.shadow_item_first, .shadow_item_second {
-    height: 30px;
-    width: 95%;
-    background-color: black;
-    opacity: 0.33;
-    border-radius: 10px;
-    margin: 0 auto;
+.button_style:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.button_style:active {
+    background: rgba(0, 0, 0, 0.6);
 }

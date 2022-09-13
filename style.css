@@ -19,7 +19,7 @@ body {
     max-width: 750px;
     display: flex;
     list-style-type: none;
-    /* justify-content: space-around; */
+    justify-content: space-around;
     margin: 20px auto;
     padding: 0;
     align-items: center;
@@ -33,17 +33,15 @@ body {
 .first_column_base {
     border: 1px dashed rgba(0, 0, 0, 0.33);
     border-radius: 10px;
-    padding: 15px;
     margin: 0 5px;
-    width: calc(80% - 30px);
+    width: 80%;
 }
 
 .second_column_base {
     border: 1px dashed rgba(0, 0, 0, 0.33);
     border-radius: 10px;
-    padding: 15px;
-    margin: 0 auto;
-    width: calc(20% - 30px);
+    margin: 0;
+    width: 20%
 }
 
 .second_column {
@@ -82,7 +80,6 @@ label::before {
     color: rgb(0, 255, 0);
 }
 
-
 .button_style {
     height: 50px;
     width: 50px;
@@ -101,4 +98,80 @@ label::before {
 
 .button_style:active {
     background: rgba(0, 0, 0, 0.6);
+}
+
+
+/* Стили для модального окна*/
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.modal-window {
+    width: 600px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    margin: 100px auto;
+    color:white;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.modal-header-titel {
+    margin: 0 auto;
+}
+.modal-header-close {
+    margin: 0;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+.modal-base {
+    padding: 10px 20px;
+}
+
+.modal-base-name {
+    background: rgba(255, 255, 255);
+    border-width: 0;
+    margin: 5px auto;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.modal-base-name input{
+    border-width: 0;
+    font-size: 16px;
+    text-align: center;
+}
+
+.modal-base-text {
+    height: 30px;
+    background: rgba(255, 255, 255);
+    border-width: 0;
+    margin: 5px auto;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.modal-base-text input{
+    border-width: 0;
+    text-align: center;
+    font-size: 16px;
+    width: 100%;
+    padding: 0;
+}
+
+.modal-action {
+    padding: 10px 20px;
 }

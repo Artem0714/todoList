@@ -13,8 +13,8 @@
     <header1 class="header1">
         <div class="cap">
             <ul class="cap_item">
-                <li class="first_column_base"><a class="first_column_link">Название дела</a></li>
-                <li class="second_column_base"><a class="second_column_link">Выполнено</a></li>
+                <li class="first_column_base"><div class="first_column_link"><p>Название дела</p></div></li>
+                <li class="second_column_base"><div class="second_column_link"><p>Выполнено</p></div></li>
             </ul>
         </div>
     </header1>
@@ -30,7 +30,30 @@
     <div>
         <input type='button' class="button_style" value="+"></input>
     </div>
+
+    <div class="modal">
+        <div class="modal-overlay">
+            <div class="modal-window">
+                <div class="modal-header">
+                    <p class="modal-header-titel">НОВОЕ ДЕЛО</p>
+                    <p class="modal-header-close">&times;</p>
+                </div>
+                <div class="modal-base">
+                    <div class="modal-base-name">
+                        <input type="text" placeholder="Название дела"></input>
+                    </div>
+                    <div class="modal-base-text">
+                        <input type="text" placeholder="Введите, то что необходимо сделать"></input>
+                    </div>
+                </div>
+                <div class="modal-action">
+                    <button>Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 
 <script src='options.js' charset="UTF-8"> </script>
 </html>

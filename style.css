@@ -35,13 +35,15 @@ body {
     border-radius: 10px;
     margin: 0 5px;
     width: 80%;
+    align-items: center;
 }
 
 .second_column_base {
     border: 1px dashed rgba(0, 0, 0, 0.33);
     border-radius: 10px;
     margin: 0;
-    width: 20%
+    width: 20%;
+    align-items: center;
 }
 
 .second_column {
@@ -50,16 +52,20 @@ body {
 }
 
 .shadow_item_first{
-    height: 50px;
-    width: 98%;
+    width: 580px;
     background: rgba(0, 0, 0, 0.33);
     border-radius: 10px;
     margin: 0 auto;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
 }
 
 
 .shadow_item_second {
     display: none;
+    height: 30px;
+    width: 30px;
 }
 
 label::before {
@@ -124,54 +130,115 @@ label::before {
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
+    align-items: center
 }
 
 .modal-header-titel {
     margin: 0 auto;
+    font-size: 20px;
+    transform: translatex(10px);    
 }
 .modal-header-close {
-    margin: 0;
-    font-size: 36px;
+    margin: 5px 0;
+    font-size: 20px;
     cursor: pointer;
+    max-width: 20px;
+    max-height: 20px;
+    transform: translatey(-25%);
+}
+
+.modal-header-close:hover {
+    color: rgb(255, 249, 200);
+}
+
+.modal-header-close:active {
+    color: rgb(250, 231, 144);
 }
 
 .modal-base {
-    padding: 10px 20px;
+    padding: 0 20px;
 }
 
-.modal-base-name {
-    background: rgba(255, 255, 255);
-    border-width: 0;
-    margin: 5px auto;
-    border-radius: 5px;
-    width: 100%;
-    font-size: 16px;
-}
-
-.modal-base-name input{
+.modal-base-name textarea, .modal-base-text textarea{
     border-width: 0;
     font-size: 16px;
-    text-align: center;
-}
-
-.modal-base-text {
-    height: 30px;
-    background: rgba(255, 255, 255);
-    border-width: 0;
-    margin: 5px auto;
-    border-radius: 5px;
-    width: 100%;
-    font-size: 16px;
-}
-
-.modal-base-text input{
-    border-width: 0;
-    text-align: center;
-    font-size: 16px;
-    width: 100%;
     padding: 0;
+    width: 550px;
+    background: rgba(255, 255, 255);
+    margin: 5px auto;
+    border-radius: 5px;
+    outline: none;
+    color: rgba(118, 118, 118);
+    font-family: 'Roboto';
+    resize: none;
+    padding: 5px;
+}
+
+.modal-base-name textarea{
+    height: 20px;
+}
+
+.modal-base-text textarea{
+    height: 80px;
 }
 
 .modal-action {
     padding: 10px 20px;
+}
+
+.modal-action button{
+    height: 30px;
+    width: 100px;
+    border-width: 0;
+    font-size: 16px;
+    text-align: center;
+    background: rgba(255, 255, 255);
+    margin: 0 auto;
+    border-radius: 5px;
+    padding: 0;
+    color: rgba(118, 118, 118)
+}
+
+.modal-action button:hover {
+    background: rgb(255, 249, 200);
+}
+
+.modal-action button:active {
+    background: rgb(250, 231, 144);
+}
+/* 
+.proba1 {
+    border-width: 0;
+    width: 100%;
+    font-size: 16px;
+    font-family: 'Roboto';
+    background: rgba(255, 255, 255);
+    border-radius: 5px;
+    outline: none;
+    color: rgba(118, 118, 118);
+}
+
+.proba2 {
+    width: 100%;
+    background: rgba(255, 255, 255);
+    border-radius: 5px;
+    margin: 5px 0 0 0;
+    outline: none;
+} */
+
+.case-name-textarea, .case-contant-textarea {
+    border-width: 0;
+    width: 570px;
+    font-size: 16px;
+    font-family: 'Roboto';
+    padding: 0;
+    background: rgba(255, 255, 255);
+    border-radius: 5px;
+    color: rgba(118, 118, 118);
+    resize: none;
+    padding: 5px;
+}
+
+.case-contant-textarea {
+    margin-top: 5px;
 }

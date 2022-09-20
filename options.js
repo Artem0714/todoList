@@ -12,10 +12,10 @@ modalBlock.innerHTML=`
             </div>
             <div class="modal-base">
                 <div class="modal-base-name">
-                    <textarea class="modal-name-textarea" placeholder="Название дела"></textarea>
+                    <textarea class="modal-name-textarea" id="modal-height" placeholder="Название дела"></textarea>
                 </div>
                 <div class="modal-base-text">
-                    <textarea class="modal-text-textarea" placeholder="Введите, то что необходимо сделать..."></textarea>
+                    <textarea class="modal-text-textarea" id="modal-height" placeholder="Введите, то что необходимо сделать..."></textarea>
                 </div>
             </div>
             <div class="modal-action">
@@ -27,6 +27,17 @@ modalBlock.innerHTML=`
 
 buttonPlus.addEventListener('click', function newToDo() {
     document.body.append(modalBlock);
+    let textareaModal = document.querySelectorAll('#modal-height');
+    
+    textareaModal.forEach(elem =>{
+        elem.addEventListener("keyup", e => {
+            elem.style.height = "20px";
+            if (elem.scrollHeight > 30) {
+                elem.style.height = elem.scrollHeight - 10 + 'px';
+            };
+        });
+    }); 
+
 
     // Закрытие модального окна
     const buttonClose = document.querySelector('.modal-header-close');
@@ -73,7 +84,7 @@ for (let i = 0; i < ArrayLS.length; i++) {
     <li class="first_column">
         <div class="shadow_item_first">
             <textarea class="case-name-textarea"></textarea>
-            <textarea class="case-contant-textarea"></textarea>
+            <textarea class="case-contant-textarea" readonly></textarea>
         </div>
     </li>
     <li class="second_column">
@@ -92,6 +103,14 @@ for (let k = 0; k < nameCase.length; k++) {
     contantCase[k].value = JSON.parse(localStorage.getItem('cases'))[k][1];
 };
 
+const textarea = document.querySelectorAll('textarea')
+
+textarea.forEach(elem =>{
+    if (elem.scrollHeight > 30) {
+        elem.style.height = elem.scrollHeight - 10 + 'px';
+    };
+});
+
 //Удаление элемента массива из localStorage
 
 // let h = 1;
@@ -101,6 +120,7 @@ for (let k = 0; k < nameCase.length; k++) {
 // };
 
 // deleteCase()
+
 
 
 

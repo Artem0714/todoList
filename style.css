@@ -179,7 +179,7 @@ label::before {
 }
 
 .modal-base-text textarea{
-    height: 80px;
+    height: 20px;
 }
 
 .modal-action {
@@ -206,29 +206,11 @@ label::before {
 .modal-action button:active {
     background: rgb(250, 231, 144);
 }
-/* 
-.proba1 {
-    border-width: 0;
-    width: 100%;
-    font-size: 16px;
-    font-family: 'Roboto';
-    background: rgba(255, 255, 255);
-    border-radius: 5px;
-    outline: none;
-    color: rgba(118, 118, 118);
-}
-
-.proba2 {
-    width: 100%;
-    background: rgba(255, 255, 255);
-    border-radius: 5px;
-    margin: 5px 0 0 0;
-    outline: none;
-} */
 
 .case-name-textarea, .case-contant-textarea {
     border-width: 0;
     width: 570px;
+    height: 20px;
     font-size: 16px;
     font-family: 'Roboto';
     padding: 0;
@@ -237,8 +219,13 @@ label::before {
     color: rgba(118, 118, 118);
     resize: none;
     padding: 5px;
+    outline: none;
 }
 
 .case-contant-textarea {
     margin-top: 5px;
+}
+
+textarea::-webkit-scrollbar {
+    width: 0px;
 }

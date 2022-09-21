@@ -59,8 +59,15 @@ buttonPlus.addEventListener('click', function newToDo() {
     });
 });
 
+const p = document.querySelectorAll('p')
 
-//Сохранение в localStorage и проецирование Cases на главную страницу
+p.forEach(elem =>{
+    if (elem.scrollHeight > 30) {
+        elem.style.height = elem.scrollHeight - 6 + 'px';
+    };
+});
+
+//Сохранение в localStorage
 let ArrayLS =[];
 
 if (JSON.parse(localStorage.getItem('cases'))) {
@@ -72,46 +79,68 @@ if (ArrayLS[0] != null) {
 };
 
 let caseStringAction = function() {
-    ArrayLS.push([document.querySelector('.modal-name-textarea').value, document.querySelector('.modal-text-textarea').value]);
+    ArrayLS.push([
+        document.querySelector('.modal-name-textarea').value, 
+        document.querySelector('.modal-text-textarea').value
+    ]);
     localStorage.setItem('cases', JSON.stringify(ArrayLS));
-    location.reload();
+    if (document.getElementById('start_case') && ArrayLS[0]) {  
+        document.getElementById('start_case').remove();
+    };
+    displayCase(ArrayLS.length-1);
 };
 
-for (let i = 0; i < ArrayLS.length; i++) {
+//Отображение Cases на главной странице
+function displayCase (i) {
     let caseString = document.createElement('ul');
     caseString.className='shadow_item';
     caseString.innerHTML=`
     <li class="first_column">
         <div class="shadow_item_first">
-            <textarea class="case-name-textarea"></textarea>
-            <textarea class="case-contant-textarea" readonly></textarea>
+            <p class="case-name-p"></p>
+            <p class="case-contant-p"></p>
         </div>
     </li>
     <li class="second_column">
-        <input type='checkbox' class="shadow_item_second" id="input_chechbox"></input>
-        <label for="input_chechbox" class="checkbox_style"></label>
+        <input type='checkbox' class="shadow_item_second" id="input_chechbox${i}"></input>
+        <label for="input_chechbox${i}" class="checkbox_style"></label>
+        <button class="shadow_case_close">&#10060;</button>
     </li>
     `;
     document.querySelector('.shadow').append(caseString);
 };
 
-const nameCase =  document.querySelectorAll('.case-name-textarea');
-const contantCase = document.querySelectorAll('.case-contant-textarea');
-
-for (let k = 0; k < nameCase.length; k++) {
-    nameCase[k].value = JSON.parse(localStorage.getItem('cases'))[k][0];
-    contantCase[k].value = JSON.parse(localStorage.getItem('cases'))[k][1];
+for (let i = 0; i < ArrayLS.length; i++) {
+    displayCase (i);
 };
 
-const textarea = document.querySelectorAll('textarea')
+const nameCase =  document.querySelectorAll('.case-name-p');
+const contantCase = document.querySelectorAll('.case-contant-p');
 
-textarea.forEach(elem =>{
-    if (elem.scrollHeight > 30) {
-        elem.style.height = elem.scrollHeight - 10 + 'px';
-    };
-});
+for (let k = 0; k < nameCase.length; k++) {
+    nameCase[k].textContent = JSON.parse(localStorage.getItem('cases'))[k][0];
+    contantCase[k].textContent = JSON.parse(localStorage.getItem('cases'))[k][1];
+};
 
 //Удаление элемента массива из localStorage
+
+let deleteButton = document.querySelectorAll('.shadow_case_close');
+
+for (let s = 0; s < deleteButton.length; s++) {
+    deleteButton[s].addEventListener('click', function deleteCase() {
+        ArrayLS.splice(s,1);
+        localStorage.setItem('cases', JSON.stringify(ArrayLS));
+        if (document.getElementById('start_case') && ArrayLS[0]) {  
+            document.getElementById('start_case').remove();
+        };
+        // console.log(ArrayLS.length);
+    }, {
+        passive: true,
+        once: true
+    });
+    
+    // displayCase(ArrayLS.length-1);
+};
 
 // let h = 1;
 // function deleteCase () {
@@ -122,6 +151,20 @@ textarea.forEach(elem =>{
 // deleteCase()
 
 
+
+
+
+
+// let inputCheck = document.querySelectorAll('.shadow_item_second').checked;
+
+// inputCheck.forEach(elem, e => {
+//     if(elem) {
+//         console.log(e);
+//     }
+// })
+
+
+// console.log(document.querySelector('.shadow_item_second').checked);
 
 
 

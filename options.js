@@ -38,7 +38,6 @@ buttonPlus.addEventListener('click', function newToDo() {
         });
     }); 
 
-
     // Закрытие модального окна
     const buttonClose = document.querySelector('.modal-header-close');
     buttonClose.addEventListener('click', function closeModalWindow() {
@@ -52,6 +51,8 @@ buttonPlus.addEventListener('click', function newToDo() {
     const buttonAdd = document.querySelector('.modal-action');
     buttonAdd.addEventListener('click', function AddingNewCase() {
         caseStringAction ();
+        document.querySelector('.modal-name-textarea').value = ''; 
+        document.querySelector('.modal-text-textarea').value = '';
         document.querySelector('.modal').remove();
     }, {
         passive: true,
@@ -59,23 +60,16 @@ buttonPlus.addEventListener('click', function newToDo() {
     });
 });
 
-const p = document.querySelectorAll('p')
-
-p.forEach(elem =>{
-    if (elem.scrollHeight > 30) {
-        elem.style.height = elem.scrollHeight - 6 + 'px';
-    };
-});
-
 //Сохранение в localStorage
 let ArrayLS =[];
 
-if (JSON.parse(localStorage.getItem('cases'))) {
-    ArrayLS =JSON.parse(localStorage.getItem('cases'));
+if (JSON.parse(localStorage.getItem('cases')) && JSON.parse(localStorage.getItem('cases')).length !== 0) {
+    ArrayLS = JSON.parse(localStorage.getItem('cases'));
+    document.getElementById('start_case').remove(); 
 };
 
 if (ArrayLS[0] != null) {
-    document.getElementById('start_case').remove();    
+       
 };
 
 let caseStringAction = function() {
@@ -84,87 +78,59 @@ let caseStringAction = function() {
         document.querySelector('.modal-text-textarea').value
     ]);
     localStorage.setItem('cases', JSON.stringify(ArrayLS));
-    if (document.getElementById('start_case') && ArrayLS[0]) {  
-        document.getElementById('start_case').remove();
-    };
-    displayCase(ArrayLS.length-1);
+    cleanerCases();
+    displayCases();
 };
 
 //Отображение Cases на главной странице
-function displayCase (i) {
-    let caseString = document.createElement('ul');
-    caseString.className='shadow_item';
-    caseString.innerHTML=`
-    <li class="first_column">
-        <div class="shadow_item_first">
-            <p class="case-name-p"></p>
-            <p class="case-contant-p"></p>
-        </div>
-    </li>
-    <li class="second_column">
-        <input type='checkbox' class="shadow_item_second" id="input_chechbox${i}"></input>
-        <label for="input_chechbox${i}" class="checkbox_style"></label>
-        <button class="shadow_case_close">&#10060;</button>
-    </li>
-    `;
-    document.querySelector('.shadow').append(caseString);
+function displayCases () {
+    for (let i = 0; i < ArrayLS.length; i++) {
+        let caseString = document.createElement('ul');
+        caseString.className='shadow_item';
+        caseString.id="number"+i;
+        caseString.innerHTML=`
+        <li class="first_column">
+            <div class="shadow_item_first">
+                <p class="case-name-p"></p>
+                <p class="case-contant-p"></p>
+            </div>
+        </li>
+        <li class="second_column">
+            <input type='checkbox' class="shadow_item_second" id="input_chechbox${i}"></input>
+            <label for="input_chechbox${i}" class="checkbox_style"></label>
+            <button class="shadow_case_close">&#10060;</button>
+        </li>
+        `;
+        document.querySelector('.shadow').append(caseString);
+
+        document.querySelectorAll('.case-name-p')[i].textContent = ArrayLS[i][0];
+        document.querySelectorAll('.case-contant-p')[i].textContent = ArrayLS[i][1];  
+    };
+    document.querySelectorAll('p').forEach(elem =>{
+        if (elem.scrollHeight > 30) {
+            elem.style.height = elem.scrollHeight - 6 + 'px';
+        };
+    });
 };
 
-for (let i = 0; i < ArrayLS.length; i++) {
-    displayCase (i);
-};
-
-const nameCase =  document.querySelectorAll('.case-name-p');
-const contantCase = document.querySelectorAll('.case-contant-p');
-
-for (let k = 0; k < nameCase.length; k++) {
-    nameCase[k].textContent = JSON.parse(localStorage.getItem('cases'))[k][0];
-    contantCase[k].textContent = JSON.parse(localStorage.getItem('cases'))[k][1];
-};
+displayCases();
 
 //Удаление элемента массива из localStorage
 
-let deleteButton = document.querySelectorAll('.shadow_case_close');
+const deleteButton = document.querySelectorAll('.shadow_case_close');
 
 for (let s = 0; s < deleteButton.length; s++) {
     deleteButton[s].addEventListener('click', function deleteCase() {
         ArrayLS.splice(s,1);
         localStorage.setItem('cases', JSON.stringify(ArrayLS));
-        if (document.getElementById('start_case') && ArrayLS[0]) {  
-            document.getElementById('start_case').remove();
-        };
-        // console.log(ArrayLS.length);
-    }, {
-        passive: true,
-        once: true
+        cleanerCases();
+        displayCases();
     });
-    
-    // displayCase(ArrayLS.length-1);
 };
 
-// let h = 1;
-// function deleteCase () {
-//     ArrayLS.splice(h,1);
-//     console.log(ArrayLS)
-// };
-
-// deleteCase()
-
-
-
-
-
-
-// let inputCheck = document.querySelectorAll('.shadow_item_second').checked;
-
-// inputCheck.forEach(elem, e => {
-//     if(elem) {
-//         console.log(e);
-//     }
-// })
-
-
-// console.log(document.querySelector('.shadow_item_second').checked);
-
-
-
+function cleanerCases() {
+    let pieces = document.querySelectorAll('.shadow_item')
+    pieces.forEach (piece => {
+        piece.remove();
+    });
+};

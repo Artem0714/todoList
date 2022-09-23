@@ -65,7 +65,7 @@ let ArrayLS =[];
 
 if (JSON.parse(localStorage.getItem('cases')) && JSON.parse(localStorage.getItem('cases')).length !== 0) {
     ArrayLS = JSON.parse(localStorage.getItem('cases'));
-    document.getElementById('start_case').remove(); 
+    document.getElementById('start_case').remove();
 };
 
 if (ArrayLS[0] != null) {
@@ -111,22 +111,24 @@ function displayCases () {
             elem.style.height = elem.scrollHeight - 6 + 'px';
         };
     });
+
+    //Удаление элемента массива из localStorage
+
+    const deleteButton = document.querySelectorAll('.shadow_case_close');
+
+    for (let s = 0; s < deleteButton.length; s++) {
+        deleteButton[s].addEventListener('click', function deleteCase() {
+            ArrayLS.splice(s,1);
+            localStorage.setItem('cases', JSON.stringify(ArrayLS));
+            cleanerCases();
+            displayCases();
+        });
+    };
 };
 
 displayCases();
 
-//Удаление элемента массива из localStorage
 
-const deleteButton = document.querySelectorAll('.shadow_case_close');
-
-for (let s = 0; s < deleteButton.length; s++) {
-    deleteButton[s].addEventListener('click', function deleteCase() {
-        ArrayLS.splice(s,1);
-        localStorage.setItem('cases', JSON.stringify(ArrayLS));
-        cleanerCases();
-        displayCases();
-    });
-};
 
 function cleanerCases() {
     let pieces = document.querySelectorAll('.shadow_item')

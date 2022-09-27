@@ -71,6 +71,10 @@ body {
     display: none;
 }
 
+.shadow_item_second_start {
+    display: none;
+}
+
 .shadow_case_close {
     display: inline-block;
     height: 30px;
@@ -194,6 +198,10 @@ label::before {
     font-family: 'Roboto';
     resize: none;
     padding: 5px;
+}
+
+.modal-base-name textarea::placeholder {
+    color: var(--c, rgba(118, 118, 118));
 }
 
 .modal-base-name textarea{

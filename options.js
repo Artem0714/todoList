@@ -41,36 +41,52 @@ buttonPlus.addEventListener('click', function newToDo() {
     // Закрытие модального окна
     const buttonClose = document.querySelector('.modal-header-close');
     buttonClose.addEventListener('click', function closeModalWindow() {
+        document.querySelector('.modal-name-textarea').value = ''; 
+        document.querySelector('.modal-text-textarea').value = '';
         document.querySelector('.modal').remove();
-    }, {
-        passive: true,
-        once: true
-    });
+        buttonClose.removeEventListener('click', closeModalWindow);
+    })
 
     // Добавить Новое дело
     const buttonAdd = document.querySelector('.modal-action');
     buttonAdd.addEventListener('click', function AddingNewCase() {
-        caseStringAction ();
-        document.querySelector('.modal-name-textarea').value = ''; 
-        document.querySelector('.modal-text-textarea').value = '';
-        document.querySelector('.modal').remove();
-    }, {
-        passive: true,
-        once: true
-    });
-});
+        let valid = true;
+        let modalName = document.querySelector('.modal-name-textarea');
+        if (modalName.value == '') {
+            modalName.placeholder = 'Название дела должно быть не равно нулю!';
+            document.querySelector('.modal-name-textarea').style.setProperty("--c", "red");
+            valid = false;
+        } else {
+            for (let v = 0; v < (ArrayLS.length); v++) {
+                if (modalName.value == ArrayLS[v][0]) {
+                    modalName.value = '';
+                    modalName.placeholder = 'Название дела должно быть уникальным!';
+                    document.querySelector('.modal-name-textarea').style.setProperty("--c", "red");
+                    valid = false;
+                    break;
+                } else {
+                    valid = true;
+                }
+            }
+        }
+        if (valid == true) {
+            caseStringAction ();
+            modalName.placeholder = "Название дела";
+            modalName.value = ''; 
+            document.querySelector('.modal-text-textarea').value = '';
+            buttonAdd.removeEventListener('click', AddingNewCase);
+            document.querySelector('.modal').remove();
+        }
+    })
+})
 
 //Сохранение в localStorage
 let ArrayLS =[];
 
 if (JSON.parse(localStorage.getItem('cases')) && JSON.parse(localStorage.getItem('cases')).length !== 0) {
     ArrayLS = JSON.parse(localStorage.getItem('cases'));
-    document.getElementById('start_case').remove();
-};
-
-if (ArrayLS[0] != null) {
-       
-};
+    document.getElementById('start_case').style.display = 'none';
+}
 
 let caseStringAction = function() {
     ArrayLS.push([
@@ -104,13 +120,35 @@ function displayCases () {
         document.querySelector('.shadow').append(caseString);
 
         document.querySelectorAll('.case-name-p')[i].textContent = ArrayLS[i][0];
-        document.querySelectorAll('.case-contant-p')[i].textContent = ArrayLS[i][1];  
-    };
+        document.querySelectorAll('.case-contant-p')[i].textContent = ArrayLS[i][1];
+        if (ArrayLS[i][2]) {
+            document.querySelectorAll('.shadow_item_second')[i].checked = true;
+        }
+    }
     document.querySelectorAll('p').forEach(elem =>{
         if (elem.scrollHeight > 30) {
             elem.style.height = elem.scrollHeight - 6 + 'px';
-        };
-    });
+        }
+    })
+
+    //Сохранение значения Input Checkbox
+
+    let checkboxDone = document.querySelectorAll('.shadow_item_second')
+    for (let q = 0; q < checkboxDone.length; q++) {
+        checkboxDone[q].addEventListener('click', function AddCheckboxArray() {
+            if (checkboxDone[q].checked && ArrayLS[q][2] == null) {
+                ArrayLS[q].push('1');
+                localStorage.setItem('cases', JSON.stringify(ArrayLS));
+                cleanerCases();
+                displayCases();
+            } else if (ArrayLS[q][2] == '1') {
+                ArrayLS[q].splice(2,1);
+                localStorage.setItem('cases', JSON.stringify(ArrayLS));
+                cleanerCases();
+                displayCases();
+            }
+        });
+    };
 
     //Удаление элемента массива из localStorage
 
@@ -127,8 +165,6 @@ function displayCases () {
 };
 
 displayCases();
-
-
 
 function cleanerCases() {
     let pieces = document.querySelectorAll('.shadow_item')

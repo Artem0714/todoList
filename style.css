@@ -4,7 +4,7 @@
 body {
     font-family: 'Roboto';
     text-align: center; 
-    background: linear-gradient(115deg, rgb(200, 255, 98) -20%, rgb(255, 226, 96) 50%);
+    /* background: linear-gradient(115deg, rgb(200, 255, 98) -20%, rgb(255, 226, 96) 50%); */
     margin: 0;
 }
 
@@ -15,14 +15,21 @@ body {
     font-size: 24px;
 }
 
-.shadow_item, .cap_item{
+.shadow_item, .cap_item, .start_item{
     max-width: 750px;
-    display: flex;
     list-style-type: none;
     justify-content: space-around;
     margin: 20px auto;
     padding: 0;
     align-items: center;
+}
+
+.shadow_item, .cap_item {
+    display: flex;
+}
+
+.start_item {
+    display: none;
 }
 
 .first_column{
@@ -201,6 +208,9 @@ label::before {
 }
 
 .modal-base-name textarea::placeholder {
+    color: var(--c, rgba(118, 118, 118));
+}
+.modal-base-text textarea::placeholder {
     color: var(--c, rgba(118, 118, 118));
 }
 

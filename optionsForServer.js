@@ -5,11 +5,6 @@ const getTodoList = () => {
     .then(response => response.json())
 }
 
-// const getItemList = (id) => {
-//     fetch('http://localhost:3001/api/v1/todo' + id)
-//     .then((response) => response.json())
-// }
-
 const creatingTodo = (data) => {
     return fetch('http://localhost:3001/api/v1/todo', {
         method: 'POST',
@@ -18,7 +13,7 @@ const creatingTodo = (data) => {
     })
 }
 
-const changeTodo = (id) => {
+const doneTodo = (id) => {
     return fetch('http://localhost:3001/api/v1/todo/' + id,{
         method: 'PUT',
         headers: { "Content-Type": "application/json" },
@@ -26,9 +21,11 @@ const changeTodo = (id) => {
     })
 }
 
-const deleteChangeTodo = (id) => {
-    return fetch('http://localhost:3001/api/v1/todo/' + id + '.isDone',{
-        method: 'DELETE',
+const updoneTodo = (id) => {
+    return fetch('http://localhost:3001/api/v1/todo/' + id,{
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({isDone: false})
     })
 }
 
@@ -40,17 +37,7 @@ const deleteTodo = (id) => {
 
 let ArrayLS = [];
 
-getTodoList()
-    .then(data => {
-    ArrayLS = data;
-    if (ArrayLS.length !== 0) {
-        document.getElementById('start_case').style.display = 'none';
-    }
-
-    displayCases();
-});
-
-
+displayCases();
 
 
 // Открытие модального окна
@@ -96,10 +83,18 @@ buttonPlus.addEventListener('click', function newToDo() {
     // Закрытие модального окна
     const buttonClose = document.querySelector('.modal-header-close');
     buttonClose.addEventListener('click', function closeModalWindow() {
-        document.querySelector('.modal-name-textarea').value = ''; 
-        document.querySelector('.modal-text-textarea').value = '';
-        document.querySelector('.modal').remove();
+        if (document.querySelector('.modal-name-textarea').value) {
+            document.querySelector('.modal-name-textarea').value = ''
+        }
+        if (document.querySelector('.modal-text-textarea').value) {
+            document.querySelector('.modal-text-textarea').value = ''
+        }
+        document.querySelector('.modal-name-textarea').placeholder = 'Название дела';
+        document.querySelector('.modal-text-textarea').placeholder = 'Введите, то что необходимо сделать...';
+        document.querySelector('.modal-name-textarea').style.setProperty("--c", "rgba(118, 118, 118)");
+        document.querySelector('.modal-text-textarea').style.setProperty("--c", "rgba(118, 118, 118)");
         buttonClose.removeEventListener('click', closeModalWindow);
+        document.querySelector('.modal').remove();
     })
 
     // Добавить Новое дело
@@ -109,14 +104,18 @@ buttonPlus.addEventListener('click', function newToDo() {
         let modalName = document.querySelector('.modal-name-textarea');
         if (modalName.value == '') {
             modalName.placeholder = 'Название дела должно быть не равно нулю!';
-            document.querySelector('.modal-name-textarea').style.setProperty("--c", "red");
+            modalName.style.setProperty("--c", "red");
+            valid = false;
+        } else if (document.querySelector('.modal-text-textarea').value == ''){
+            document.querySelector('.modal-text-textarea').placeholder = 'Эта строка не должна оставаться пустой!';
+            document.querySelector('.modal-text-textarea').style.setProperty("--c", "red");
             valid = false;
         } else {
             for (let v = 0; v < (ArrayLS.length); v++) {
                 if (modalName.value == ArrayLS[v].title) {
                     modalName.value = '';
                     modalName.placeholder = 'Название дела должно быть уникальным!';
-                    document.querySelector('.modal-name-textarea').style.setProperty("--c", "red");
+                    modalName.style.setProperty("--c", "red");
                     valid = false;
                     break;
                 } else {
@@ -125,11 +124,15 @@ buttonPlus.addEventListener('click', function newToDo() {
             }
         }
         if (valid == true) {
-            console.log(ArrayLS);
             caseStringAction();
+            getTodoList().then(data => ArrayLS = data);
+            console.log(ArrayLS);
             cleanerCases();
             displayCases();
-            modalName.placeholder = "Название дела";
+            document.querySelector('.modal-name-textarea').placeholder = 'Название дела';
+            document.querySelector('.modal-text-textarea').placeholder = 'Введите, то что необходимо сделать...';
+            document.querySelector('.modal-name-textarea').style.setProperty("--c", "rgba(118, 118, 118)");
+            document.querySelector('.modal-text-textarea').style.setProperty("--c", "rgba(118, 118, 118)");
             modalName.value = ''; 
             document.querySelector('.modal-text-textarea').value = '';
             buttonAdd.removeEventListener('click', AddingNewCase);
@@ -138,32 +141,28 @@ buttonPlus.addEventListener('click', function newToDo() {
     })
 })
 
-//Сохранение в localStorage
-
-// let ArrayLS = [];
-// getTodoList();
-
-// if (ArrayLS.length !== 0) {
-//     document.getElementById('start_case').style.display = 'none';
-// }
-
 let caseStringAction = function() {
     ArrayLS.push({
         title: document.querySelector('.modal-name-textarea').value, 
         description: document.querySelector('.modal-text-textarea').value
     });
-    console.log(ArrayLS);
     creatingTodo({
         title: document.querySelector('.modal-name-textarea').value, 
         description: document.querySelector('.modal-text-textarea').value
-    }); /*localStorage.setItem('cases', JSON.stringify(ArrayLS))*/
-    cleanerCases();
-    displayCases();
-};
+    });
+}
 
 //Отображение Cases на главной странице
-function displayCases () {
-    // const response = await request('http://localhost:3001/api/v1/todo', 'GET', ArrayLS)
+async function displayCases () {
+    await getTodoList().then(data => {ArrayLS = data})
+
+    if (ArrayLS.length !== 0) {
+        document.getElementById('start_case').style.display = 'none';
+    } else {
+        document.getElementById('start_case').style.display = 'flex';
+    }
+
+    console.log(ArrayLS)
     for (let i = 0; i < ArrayLS.length; i++) {
         let caseString = document.createElement('ul');
         caseString.className='shadow_item';
@@ -182,10 +181,9 @@ function displayCases () {
         </li>
         `;
         document.querySelector('.shadow').append(caseString);
-
         document.querySelectorAll('.case-name-p')[i].textContent = ArrayLS[i].title;
         document.querySelectorAll('.case-contant-p')[i].textContent = ArrayLS[i].description;
-        if (ArrayLS[i].isDone) {
+        if (ArrayLS[i].isDone == true) {
             document.querySelectorAll('.shadow_item_second')[i].checked = true;
         }
     }
@@ -199,41 +197,35 @@ function displayCases () {
 
     let checkboxDone = document.querySelectorAll('.shadow_item_second')
     for (let q = 0; q < checkboxDone.length; q++) {
-        checkboxDone[q].addEventListener('click', function AddCheckboxArray() {
-            console.log(checkboxDone[q].checked && ArrayLS[q].isDone == false);
-            if (checkboxDone[q].checked && ArrayLS[q].isDone == false) {
+        checkboxDone[q].addEventListener('click', async function AddCheckboxArray() {
+            await getTodoList().then(data => {ArrayLS = data});
+            if (!ArrayLS[q].isDone || ArrayLS[q].isDone == false) {
                 ArrayLS[q].isDone = true
-                changeTodo(ArrayLS[q].id);/*localStorage.setItem('cases', JSON.stringify(ArrayLS))*/
-                cleanerCases();
-                displayCases();
+                doneTodo(ArrayLS[q].id);
             } else if (ArrayLS[q].isDone == true) {
-                delete ArrayLS[q].isDone;
-                deleteChangeTodo(ArrayLS[q].id);/*localStorage.setItem('cases', JSON.stringify(ArrayLS))*/
-                cleanerCases();
-                displayCases();
+                ArrayLS[q].isDone = false
+                updoneTodo(ArrayLS[q].id);
             }
         });
-    };
+    }
 
     //Удаление элемента массива из localStorage
 
     const deleteButton = document.querySelectorAll('.shadow_case_close');
 
     for (let s = 0; s < deleteButton.length; s++) {
-        deleteButton[s].addEventListener('click', function deleteCase() {
+        deleteButton[s].addEventListener('click', async function deleteCase() {
+            await deleteTodo(ArrayLS[s].id);
             ArrayLS.splice(s,1);
-            deleteTodo(s); /*localStorage.setItem('cases', JSON.stringify(ArrayLS))*/
             cleanerCases();
             displayCases();
         });
     };
-};
-
-displayCases();
+}
 
 function cleanerCases() {
     let pieces = document.querySelectorAll('.shadow_item')
     pieces.forEach (piece => {
         piece.remove();
-    });
-};
+    })
+}

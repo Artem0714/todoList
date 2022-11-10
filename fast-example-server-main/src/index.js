@@ -8,7 +8,7 @@ const state = require("./state");
 const fs = require("./fs");
 
 const publicPath = path.resolve(__dirname, "./public");
-const todoPath = path.resolve(__dirname, "./todo.json");
+const todoPath = path.resolve(__dirname, "../todo.json");
 const port = 3001;
 const server = express();
 

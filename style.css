@@ -151,7 +151,16 @@ label::before {
     background: rgba(255, 255, 255, 0.5);
 }
 
-.modal-window {
+.modalError-overlay {
+    position: fixed;
+    top: 300px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.modal-window, .modalError-window  {
     width: 600px;
     border-radius: 20px;
     background: rgba(0, 0, 0, 0.6);
@@ -159,19 +168,19 @@ label::before {
     color:white;
 }
 
-.modal-header {
+.modal-header, .modalError-header {
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
     align-items: center
 }
 
-.modal-header-titel {
+.modal-header-titel, .modalError-header-titel {
     margin: 0 auto;
     font-size: 20px;
     transform: translatex(10px);    
 }
-.modal-header-close {
+.modal-header-close, .modalError-header-close {
     margin: 5px 0;
     font-size: 20px;
     cursor: pointer;
@@ -228,14 +237,13 @@ label::before {
 
 .modal-action button{
     height: 30px;
-    width: 100px;
     border-width: 0;
     font-size: 16px;
     text-align: center;
     background: rgba(255, 255, 255);
     margin: 0 auto;
     border-radius: 5px;
-    padding: 0;
+    padding: 0px 7px;
     color: rgba(118, 118, 118)
 }
 

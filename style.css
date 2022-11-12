@@ -152,35 +152,35 @@ label::before {
 }
 
 .modalError-overlay {
-    position: fixed;
-    top: 300px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.5);
-}
+    position: relative;
+    vertical-align: middle;
+} 
 
-.modal-window, .modalError-window  {
-    width: 600px;
+.modal-window {
+    --width: 600px;
+    --height: 188px;
     border-radius: 20px;
     background: rgba(0, 0, 0, 0.6);
-    margin: 100px auto;
     color:white;
+    position: absolute;
+    top: calc(50% - var(--height) / 2);
+    left: calc(50% - var(--width) / 2);
 }
 
-.modal-header, .modalError-header {
+.modal-header {
+    width: 560px;
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
     align-items: center
 }
 
-.modal-header-titel, .modalError-header-titel {
+.modal-header-titel {
     margin: 0 auto;
     font-size: 20px;
     transform: translatex(10px);    
 }
-.modal-header-close, .modalError-header-close {
+.modal-header-close {
     margin: 5px 0;
     font-size: 20px;
     cursor: pointer;

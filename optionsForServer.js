@@ -4,8 +4,6 @@ const getTodoList = () => {
     return fetch('http://localhost:3001/api/v1/todo')
     .then(response => {
         if (response.ok) {
-            // response.json();
-            // console.log(response.json());
             return {
                 body: response.json(),
                 status: "success"
@@ -37,14 +35,11 @@ const doneTodo = function (id) {
         body: JSON.stringify({isDone: true})
     }).then(response => {
         if (response.ok) {
-            return response.json()
+            return {status: "success"}
         } else {
-        return response.json().then(error => {
-            const e = new Error('ЧТо-то пошло не так')
-            e.data = error
-            throw e
-        })}
-    }).catch(() => console.warn('Ошибка2'))
+            return {status: "failure"}
+        }
+    })
 }
 
 const updoneTodo = (id) => {
@@ -54,15 +49,11 @@ const updoneTodo = (id) => {
         body: JSON.stringify({isDone: false})
     }).then(response => {
         if (response.ok) {
-            return response.json()
+            return {status: "success"}
         } else {
-        return response.json().then(error => {
-            const e = new Error('ЧТо-то пошло не так')
-            e.data = error
-            throw e
-            console.log('Ошибка3')
-        })}
-    }).catch(() => console.warn('Ошибка3'))
+            return {status: "failure"}
+        }
+    })
 }
 
 const deleteTodo = (id) => {
@@ -70,14 +61,11 @@ const deleteTodo = (id) => {
         method: 'DELETE'
     }).then(response => {
         if (response.ok) {
-            return response.json()
+            return {status: "success"}
         } else {
-        return response.json().then(error => {
-            const e = new Error('ЧТо-то пошло не так')
-            e.data = error
-            throw e
-        })}
-    }).catch(() => console.warn('Ошибка1'))
+            return {status: "failure"}
+        }
+    })
 }
 
 let ArrayLS = [];
@@ -114,6 +102,11 @@ modalBlock.innerHTML=`
 
 buttonPlus.addEventListener('click', function newToDo() {
     document.body.append(modalBlock);
+    if (document.querySelector('.modal-action-button').style.background = "rgba(240, 128, 128, 0.9)") {
+        document.querySelector('.modal-action-button').style.background = "rgba(255, 255, 255)"; 
+        document.querySelector('.modal-action-button').style.color = "rgba(118, 118, 118)";
+    }
+
     let textareaModal = document.querySelectorAll('#modal-height');
     
     textareaModal.forEach(elem =>{
@@ -203,9 +196,8 @@ async function displayCases () {
         
         if (result.status === 'success') {
             await result.body.then(data => { ArrayLS = data })
-            console.log(ArrayLS, 'start getTodoList');
         } else {
-            // openBlockError();
+            openBlockError('getTodoList');
             console.log('ErrorDisplayCase');
         }
     }
@@ -255,18 +247,25 @@ async function displayCases () {
         
             if (result.status === 'success') {
                 await result.body.then(data => { ArrayLS = data })
-                console.log(ArrayLS, 'start getTodoList');
             } else {
-                // openBlockError();
+                openBlockError('getTodoList');
                 console.log('ErrorDisplayCase');
             }
-            
+
             if (!ArrayLS[q].isDone || ArrayLS[q].isDone == false) {
-                ArrayLS[q].isDone = true
-                doneTodo(ArrayLS[q].id);
+                const result = await doneTodo(ArrayLS[q].id);
+                if (result.status === 'success') {
+                    ArrayLS[q].isDone = true
+                } else {
+                    openBlockError('doneTodo');
+                }
             } else if (ArrayLS[q].isDone == true) {
-                ArrayLS[q].isDone = false
-                updoneTodo(ArrayLS[q].id);
+                const result = await updoneTodo(ArrayLS[q].id);
+                if (result.status === 'success') {
+                    ArrayLS[q].isDone = false
+                } else {
+                    openBlockError('updoneTodo');
+                }
             }
         });
     }
@@ -277,10 +276,15 @@ async function displayCases () {
 
     for (let s = 0; s < deleteButton.length; s++) {
         deleteButton[s].addEventListener('click', async function deleteCase() {
-            await deleteTodo(ArrayLS[s].id);
-            ArrayLS.splice(s,1);
-            cleanerCases();
-            displayCases();
+            const result = await deleteTodo(ArrayLS[s].id);
+
+            if (result.status === 'success') {
+                ArrayLS.splice(s,1);
+                cleanerCases();
+                displayCases();
+            } else {
+                openBlockError('deleteTodo');
+            }
         });
     };
 }
@@ -298,4 +302,32 @@ function buttonError() {
     butAct.innerText = 'Добавьте снова';
     butAct.style.background = "rgba(240, 128, 128, 0.9)";
     butAct.style.color = "white";
+}
+
+function openBlockError(p) {
+    const blockError = document.createElement('div');
+    blockError.className='modal';
+    blockError.innerHTML=`
+        <div class="modal-overlay">
+            <div class="modal-window">
+                <div class="modal-header">
+                    <p class="modal-header-titel"></p>
+                    <p class="modal-header-close">&#10060;</p>
+                </div>
+            </div>
+        </div>
+        `;
+    document.body.append(blockError);
+
+    if (p == 'doneTodo' || p == 'updoneTodo' || p == 'getTodoList') {
+        document.querySelector('.modal-header-titel').textContent = "ОШИБКА! ПОЖАЛУЙСТА, ОБНОВИТЕ СТРАНИЦУ!"
+    } else {
+        document.querySelector('.modal-header-titel').textContent = "ОШИБКА! УДАЛИТЕ СНОВА!"
+    }
+
+    const buttonClose = document.querySelector('.modal-header-close');
+    buttonClose.addEventListener('click', function closeModalWindow() {
+        buttonClose.removeEventListener('click', closeModalWindow);
+        document.querySelector('.modal').remove();
+    })
 }
